@@ -314,6 +314,15 @@ fn current_font_policy_platform() -> FontPolicyPlatform {
     if cfg!(target_os = "windows") { FontPolicyPlatform::Windows } else { FontPolicyPlatform::Other }
 }
 
+/// Whether egui grid-fits glyph outlines. Hinting snaps heights to whole pixels, which at the
+/// whole-pixel sizes (13 pt at 100 %, i.e. one pixel per point, whether that is Auto on a display
+/// scaled to 1× or a manual 100 % on a Retina one) stretches Inter vertically relative to its width,
+/// while fractional sizes (95 %, 125 %) and 200 % look right (#4002). macOS itself never hints text,
+/// so there it is off and glyphs keep their design proportions at every interface size.
+fn font_hinting_for(macos: bool) -> bool {
+    !macos
+}
+
 fn primary_font_tweak(platform: FontPolicyPlatform, name: &str) -> FontTweak {
     let mut tweak = FontTweak::default();
     if platform == FontPolicyPlatform::Windows && name == "JetBrainsMono" {
@@ -471,6 +480,7 @@ pub fn apply(ctx: &egui::Context, kind: ThemeKind) {
     // and grey next to the system's text); the dark theme keeps egui's own curve. At 200 % both
     // make little difference.
     v.text_options.subpixel_binning = false;
+    v.text_options.font_hinting = font_hinting_for(cfg!(target_os = "macos"));
     if !t.dark() {
         v.text_options.color_transfer_function = egui::epaint::FontColorTransferFunction::Gamma(0.75);
     }
@@ -632,6 +642,12 @@ mod tests {
         // A face that doesn't parse is left alone rather than guessed at.
         assert_eq!(on_interface_baseline(FontData::from_static(b"not a font")).tweak, FontTweak::default());
         assert_eq!(vertical_metrics(b"", 0), None);
+    }
+
+    #[test]
+    fn macos_draws_unhinted_glyphs_so_text_keeps_its_proportions() {
+        assert!(!font_hinting_for(true), "#4002");
+        assert!(font_hinting_for(false));
     }
 
     #[test]
