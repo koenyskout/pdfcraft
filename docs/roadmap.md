@@ -1,6 +1,6 @@
 # PdfCraft roadmap: milestones and what's next
 
-> **Last reviewed:** 2026-10-20 · **Last updated:** 2026-10-20 · **Change:** minor (M12 #3673: Character encoding accepts Identity-H/V with Adobe CJK collections; estimates unchanged)
+> **Last reviewed:** 2026-10-22 · **Last updated:** 2026-10-22 · **Change:** minor (M3, storytold/pdfcraft#4002: macOS interface text retains Inter's proportions at 1×; estimates unchanged)
 
 > **Last reviewed:** 2026-10-20 | **Last updated:** 2026-10-20 | **Change:** minor (M10, #3532 partial: vector printing retains existing appearances with absent Subtype; estimates unchanged)
 
@@ -239,6 +239,7 @@ M2 (renderer), M7 (content editing), M10 (OCR and Office), M11 (Preflight and st
 
 | Date | Change | Summary |
 |---|---|---|
+| 2026-10-22 | minor | M3, storytold/pdfcraft#4002: macOS UI disables epaint hinting after a direct 13 pt/1× Inter atlas measurement found a one-pixel vertical-only expansion. Raster and theme regressions passed after failing with hinting restored. Estimates unchanged. |
 | 2026-10-20 | minor | M4: initial-view window and interface options resolve indirect boolean ViewerPreferences values; synthetic true/false and save/reopen regressions retain defaults for malformed entries. Estimates unchanged. |
 | 2026-10-21 | minor | M3, #3808: the Pages inspector has an independent 50–150% thumbnail size slider and buttons; selection and current-page following are retained, with headless ui.set coverage. Estimates unchanged. |
 | 2026-10-20 | minor | M11 #3507: image merging preserves comments and state across content streams. Estimates unchanged. |
